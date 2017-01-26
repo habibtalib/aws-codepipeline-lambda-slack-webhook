@@ -16,12 +16,30 @@ import sys
 import os
 import requests
 import json
+import boto3
+
+code_pipeline = boto3.client('codepipeline')
 
 def send_post(event, context):
-    webhook = 'https://hooks.slack.com/services/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'
-    #print event
-    #print context
-    response = requests.post(webhook, headers={"Content-Type": "application/json"}, data=json.dumps({"text": event["msg"]}))
+  """Notify Slack of CodePipeline event
+
+  Args:
+    event: The CodePipeline json input
+    context: lambda execution context
+
+  """
+
+  jobId = event['CodePipeline.job']['id']
+  webhook = event['CodePipeline.job']['data']['actionConfiguration']['configuration']['UserParameters']['webhook']
+  message = event['CodePipeline.job']['data']['actionConfiguration']['configuration']['UserParameters']['message']
+
+  #Slack webhook post
+  try:
+    response = requests.post(webhook, headers={"Content-Type": "application/json"}, data=json.dumps({"text": message}))
     print response.text
     response.raise_for_status()
+    code_pipeline.put_job_success_result(jobId=job)
+  except requests.ConnectionError:
+  	code_pipeline.put_job_failure_result(jobId=job)
+
     
