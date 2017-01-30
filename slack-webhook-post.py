@@ -28,18 +28,20 @@ def send_post(event, context):
     context: lambda execution context
 
   """
-
   jobId = event['CodePipeline.job']['id']
-  webhook = event['CodePipeline.job']['data']['actionConfiguration']['configuration']['UserParameters']['webhook']
-  message = event['CodePipeline.job']['data']['actionConfiguration']['configuration']['UserParameters']['message']
 
+  #Get userparameters string and decode as json
+  user_parameters = event['CodePipeline.job']['data']['actionConfiguration']['configuration']['UserParameters']
+  decoded_parameters = json.loads(user_parameters)
+
+  webhook = decoded_parameters['webhook']
+  message = decoded_parameters['message']
+  
   #Slack webhook post
   try:
     response = requests.post(webhook, headers={"Content-Type": "application/json"}, data=json.dumps({"text": message}))
     print response.text
     response.raise_for_status()
-    code_pipeline.put_job_success_result(jobId=job)
+    code_pipeline.put_job_success_result(jobId=jobId)
   except requests.ConnectionError:
-  	code_pipeline.put_job_failure_result(jobId=job)
-
-    
+  	code_pipeline.put_job_failure_result(jobId=jobId)
