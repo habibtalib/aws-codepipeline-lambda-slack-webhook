@@ -42,13 +42,13 @@ Parameters:
     Description: >-
       The filename.handler-method value in your function. 
       For example, "main.handler" would call the handler method defined in main.py.
-  # createSchedule:
-  #   Type: String
-  #   Description: Sets this lambda to run on a Schedule
-  #   AllowedValues: 
-  #    - "true"
-  #    - "false"
-  #   Default: "false"
+  createBucket:
+    Type: String
+    Description: Sets this lambda to run on a Schedule
+    AllowedValues: 
+     - "true"
+     - "false"
+    Default: "false"
 
   #Conditional flags
   # createBucket:
