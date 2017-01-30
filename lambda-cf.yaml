@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >-
+  Generic lamda template
+
+Parameters: 
+  team:
+    Type: String
+    Description: (required) team name - lookup @ https://home.byu.edu/webapp/grouss-web/userSynchronizationSummary.htm
+  env:
+    Type: String
+    Description:  (required) see - https://byuoit.atlassian.net/wiki/display/OAPP/Tagging
+    AllowedValues:
+      - dev
+      - dev-noshutdown
+      - test
+      - stage
+      - production
+  dataSensitivity:
+    Type: String
+    Description: (required) - see https://byuoit.atlassian.net/wiki/display/OAPP/Tagging
+    AllowedValues:
+      - public
+      - internal
+      - confidential
+      - highly confidential
+  app:
+    Type: String
+    Description: (required) Application name (Also used for bucket name. Follow S3 bucket name conventions)
+  runtime:
+    Type: String
+    Description: Lambda runtime
+    ###TODO verify values - python is verified
+    AllowedValues:
+      - python2.7
+      - node.js4.3
+      - c#
+      - java8
+      - edgenode.js4.3
+  handler:
+    Type: String
+    Description: >-
+      The filename.handler-method value in your function. 
+      For example, "main.handler" would call the handler method defined in main.py.
+  # createSchedule:
+  #   Type: String
+  #   Description: Sets this lambda to run on a Schedule
+  #   AllowedValues: 
+  #    - "true"
+  #    - "false"
+  #   Default: "false"
+
+  #Conditional flags
+  # createBucket:
+  #   Type: String
+  #   Description: Would you like fries... I mean... an S3 bucket with your order
+  #   AllowedValues:
+  #     - "true"
+  #     - "false"
+  #   Default: "false" 
+  
+Resources:
+  # Required Roles and policies
+  EventListRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Ref app
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "s3.amazonaws.com"
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        -
+          PolicyName: S3Put
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: s3:PutObject
+                Resource: "*"
+
+  # Lambda creation
+  EventListFunctionWithSchedule:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: !Ref handler
+      Runtime: !Ref runtime
+      #CodeUri is overwritten by "aws cloudformation package" command
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 3
+      Role: !GetAtt EventListRole.Arn
+Outputs:
+  lambdaArn:
+    Value: !GetAtt EventListFunction.Arn

@@ -1,0 +1,20 @@
+version: 0.1
+phases:
+  install:
+    commands:
+      - echo no os dependencies required
+  pre_build:
+    commands:
+      - echo Installing requirements from requirements.txt
+      - pip install -r requirements.txt -t .
+  build:
+    commands:
+      - aws cloudformation package --template-file lambda-cf.yaml --s3-bucket byu-codebuild --output-template-file sam_post.yaml
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - sam_post.yaml
+    - cfg-stg.json
+    - cfg-prd.json
