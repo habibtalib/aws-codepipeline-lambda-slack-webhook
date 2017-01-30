@@ -49,15 +49,6 @@ Parameters:
      - "true"
      - "false"
     Default: "false"
-
-  #Conditional flags
-  # createBucket:
-  #   Type: String
-  #   Description: Would you like fries... I mean... an S3 bucket with your order
-  #   AllowedValues:
-  #     - "true"
-  #     - "false"
-  #   Default: "false" 
   
 Resources:
   # Required Roles and policies
@@ -89,7 +80,7 @@ Resources:
                 Resource: "*"
 
   # Lambda creation
-  EventListFunctionWithSchedule:
+  EventListFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: !Ref handler
