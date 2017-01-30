@@ -1,5 +1,8 @@
 # aws-lambda-slack-webhook
-Lambda for generic slack webhook
+Lambda for CodePipeline slack webhook post that receives metadata from the CodePipeline and closes the CodePipeline Job on completion
+
+Codepipeline slack post depends on Service Roles:
+https://github.com/byu-oit-appdev/iac/blob/master/cloudformation/account/account-service-roles.yaml
 
 Makes use of UserParameters set in the CodePipeline.job event data:
 ```json{
