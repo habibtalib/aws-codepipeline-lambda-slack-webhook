@@ -85,7 +85,7 @@ Resources:
     Properties:
       Handler: !Ref handler
       Runtime: !Ref runtime
-      #CodeUri is overwritten by "aws cloudformation package" command
+      #CodeUri is overwritten by "aws cloudformation package" command  
       CodeUri: .
       MemorySize: 128
       Timeout: 3
