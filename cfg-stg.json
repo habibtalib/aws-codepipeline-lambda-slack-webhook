@@ -3,8 +3,7 @@
     "team" : "AD-Student Life Applications",
     "env" : "stage",
     "dataSensitivity" : "public",
-    "app" : "slack-webhook-stg",    
-    "createBucket" : "false",
+    "app" : "slack-webhook",    
     "runtime" : "python2.7",
     "handler" : "slack-webhook-post.send_post"
   }
