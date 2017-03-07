@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: >-
-  Generic lamda template
+
+Description: Generic lamda template
 
 Parameters: 
   team:
@@ -15,7 +15,7 @@ Parameters:
       - dev-noshutdown
       - test
       - stage
-      - production
+      - prod
   dataSensitivity:
     Type: String
     Description: (required) - see https://byuoit.atlassian.net/wiki/display/OAPP/Tagging
@@ -30,29 +30,62 @@ Parameters:
   runtime:
     Type: String
     Description: Lambda runtime
-    ###TODO verify values - python is verified
+    #Verify values based on cfn error response when trying invalid value Q12017
     AllowedValues:
-      - python2.7
-      - node.js4.3
-      - c#
       - java8
-      - edgenode.js4.3
+      - nodejs
+      - nodejs4.3
+      - python2.7
   handler:
     Type: String
     Description: >-
       The filename.handler-method value in your function. 
       For example, "main.handler" would call the handler method defined in main.py.
+  timeout:
+    Type: String
+    Description: Lambda timeout in minutes
+    Default: 3
+  lambdaMemory:
+    Type: "Number"
+    Description: "The ammount of Memory to allocate for the Lambda"
+    Default: 128
+    AllowedValues:
+      - 128
+      - 192
+      - 256
+      - 320
+      - 384
+      - 448
+      - 512
+      - 576
+      - 640
+      - 704
+      - 768
+      - 832
+      - 896
+      - 960
+      - 1024
+      - 1088
+      - 1152
+      - 1216
+      - 1280
+      - 1344
+      - 1408
+      - 1472
+      - 1536
+
+  #Conditional flags
   createBucket:
     Type: String
-    Description: Sets this lambda to run on a Schedule
-    AllowedValues: 
-     - "true"
-     - "false"
+    Description: Would you like fries... I mean... an S3 bucket with your order
+    AllowedValues:
+      - "true"
+      - "false"
     Default: "false"
   
 Resources:
   # Required Roles and policies
-  EventListRole:
+  LambdaRole:
     Type: "AWS::IAM::Role"
     Properties:
       RoleName: !Ref app
@@ -80,15 +113,15 @@ Resources:
                 Resource: "*"
 
   # Lambda creation
-  EventListFunction:
+  LambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: !Ref handler
       Runtime: !Ref runtime
-      #CodeUri is overwritten by "aws cloudformation package" command  
+      #CodeUri is overwritten by "aws cloudformation package" command
       CodeUri: .
-      MemorySize: 128
-      Timeout: 3
+      MemorySize: !Ref lambdaMemory
+      Timeout: !Ref timeout
       Role: !GetAtt EventListRole.Arn
 Outputs:
   lambdaArn:
