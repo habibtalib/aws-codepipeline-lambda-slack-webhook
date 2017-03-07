@@ -9,6 +9,7 @@ phases:
       - pip install -r requirements.txt -t .
   build:
     commands:
+      - aws s3 cp s3://byu-427927161742-us-west-2-cloudformation-templates/iac/cloudformation/lambda/lambda-cf.yaml .
       - aws cloudformation package --template-file lambda-cf.yaml --s3-bucket byu-codebuild --output-template-file sam_post.yaml
       - echo $?
   post_build:
