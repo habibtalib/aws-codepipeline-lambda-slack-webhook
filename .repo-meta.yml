@@ -14,8 +14,8 @@ ddd:
   ubiquitous_language_url: 
   context_map_url: 
 links:
-  system_documentation_url: https://github.com/byu-oit-appdev/aws-codepipeline-lambda-slack-webhook
-  source_repo_url: https://github.com/byu-oit-appdev/aws-codepipeline-lambda-slack-webhook
+  system_documentation_url: https://github.com/byu-oit/aws-codepipeline-lambda-slack-webhook
+  source_repo_url: https://github.com/byu-oit/aws-codepipeline-lambda-slack-webhook
   swagger_urls:
 microservice: False
 technologies_used:
@@ -23,7 +23,7 @@ technologies_used:
 stages:
   production:
     urls:
-      product_page: https://github.com/byu-oit-appdev/aws-codepipeline-lambda-slack-webhook
+      product_page: https://github.com/byu-oit/aws-codepipeline-lambda-slack-webhook
       physical_url: 
       virtual_url: 
     hosting_location: 
@@ -47,5 +47,5 @@ tags:
   env: prd
   app: aws-codepipeline-lambda-slack-webhook
   team: gro:AD-Student Life Applications
-federation_json_url: https://raw.githubusercontent.com/byu-oit-appdev/aws-codepipeline-lambda-slack-webhook/master/.repo-meta.yml
+federation_json_url: https://raw.githubusercontent.com/byu-oit/aws-codepipeline-lambda-slack-webhook/master/.repo-meta.yml
 
